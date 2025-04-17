@@ -58,6 +58,13 @@ The validation of the API is done using Symfony's built-in validation component.
 
 The error handling is done using API Platform error handling component. I have added custom error messages for some validation rule to provide clear feedback to the user.
 
+Database Design
+The database design is based on the requirements of the API. I have created the following entities:
+- `Event`: Represents an event that can be booked. It has a name, description, event_date, and a location/country.
+- `Attendee`: Represents a user who can book an event. It has a name and email and date of birth.
+- `EventBooking`: Represents a booking made by an attendee for an event. It has a status (confirmed, pending, canceled) and a date of booking.
+- `AdminUser`: Represents an admin user who can manage events and bookings. 
+
 ### Authentication & Authorization
 I have created an Admin User entity to manage certain events resource operations. I commented out the code to demonstrate my approach.
 
@@ -87,3 +94,15 @@ I have added some bonus features to the API to enhance its functionality and usa
 - API Filtering: The API supports filtering of resources based on various criteria. You can use query parameters to filter the `Events` results. I included filter by name and country.
 - Docker Support
 - Swagger/OpenAPI Documentation.
+
+## Known Issues
+When you run fixtures load you may get an error 
+```bash
+An exception occurred while executing a query: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "uniq_event_bookings"  
+  DETAIL:  Key (event_id, attendee_id)=(288, 86) already exists.
+```
+This is due to the fact that the fixtures are trying to create duplicate bookings for the same event and attendee.
+To fix this, run the command again.
+```bash
+docker compose exec php bin/console doctrine:fixtures:load
+```

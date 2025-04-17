@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Enum\EventBookingStatus;
 use App\Repository\EventBookingRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -73,6 +74,11 @@ class EventBooking
     )]
     private ?DateTimeInterface $bookingDate = null;
 
+    #[ORM\Column(type: 'string', length: 50, enumType: EventBookingStatus::class)]
+    #[Groups(['event_booking:read', 'event_booking:write', 'attendee:read'])]
+    #[Assert\NotBlank]
+    private ?EventBookingStatus $status = EventBookingStatus::STATUS_PENDING;
+
     #[Assert\Callback]
     public function validateCapacity(ExecutionContextInterface $context, mixed $payload): void
     {
@@ -121,5 +127,15 @@ class EventBooking
         $this->bookingDate = $bookingDate;
 
         return $this;
+    }
+
+    public function getStatus(): ?EventBookingStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?EventBookingStatus $status): void
+    {
+        $this->status = $status;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\EventBooking;
+use App\Enum\EventBookingStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -35,6 +36,7 @@ final class EventBookingFactory extends PersistentProxyObjectFactory
             'bookingDate' => self::faker()->dateTime(),
             'event' => EventFactory::createOne(),
             'attendee' => AttendeeFactory::createOne(),
+            'status' => self::faker()->randomElement(EventBookingStatus::cases()),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];

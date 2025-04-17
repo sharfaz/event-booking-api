@@ -70,6 +70,7 @@ final class Version20250416213447 extends AbstractMigration
               id SERIAL NOT NULL,
               event_id INT DEFAULT NULL,
               attendee_id INT DEFAULT NULL,
+              status VARCHAR(50) NOT NULL,
               booking_date TIMESTAMP(0) WITH TIME ZONE NOT NULL,
               created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT now(),
               updated_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT now(),
