@@ -64,7 +64,7 @@ To access the database from host machine, please use the following credentials:
 ## API Design
 I followed API Platform's best practices and conventions for designing the API. I used built in Doctrine ORM providers and processors for rapid development.
 
-The API is designed to be RESTful, with resources representing entities in the system. The API supports standard HTTP methods (GET, POST, PUT, DELETE) for interacting with resources.
+The API is designed to be RESTful, with resources representing entities in the system. The API supports standard HTTP methods (GET, POST, PATCH, DELETE) for interacting with resources.
 
 Also, the API supports multiple formats, including JSON and JSON-LD. The system can be easily extended to support other formats as needed.
 
