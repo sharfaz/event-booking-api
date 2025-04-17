@@ -47,6 +47,16 @@ The project use Docker for containerization and deployment, making it easy to se
 6. To view the API documentation, navigate to `https://localhost/api` in your web browser.
 6. Run `docker compose down --remove-orphans` to stop the Docker containers.
 
+## Database Access
+I have used PostgreSQL as the database for this project. The database connection details are stored in the `.env` file.
+
+To access the database from host machine, please use the following credentials:
+- Host: `localhost`
+- Port: `5432`
+- Database: `app`
+- user: `app`
+- password: `!ChangeMe!`
+
 ## API Design
 I followed API Platform's best practices and conventions for designing the API. I used built in Doctrine ORM providers and processors for rapid development.
 
@@ -64,6 +74,18 @@ The database design is based on the requirements of the API. I have created the 
 - `Attendee`: Represents a user who can book an event. It has a name and email and date of birth.
 - `EventBooking`: Represents a booking made by an attendee for an event. It has a status (confirmed, pending, canceled) and a date of booking.
 - `AdminUser`: Represents an admin user who can manage events and bookings. 
+
+### Relationships
+- `Event` → `EventBookings` (1:N): An event can have multiple bookings.
+- `Attendee` → `EventBookings` (1:N): An attendee can book multiple events, but not the same event twice.
+- Constraints:
+    - Unique constraint on `EventBooking` (`event_id`, `attendee_id`) to prevent duplicate bookings.
+    - Check constraint on `EventBooking` to ensure capacity limits are not exceeded.
+  
+I added doctrine UniqueConstraint attribute to the `EventBooking` entity to enforce this constraint at the database level. Also added Symfony validation
+constraints UniqueEntity to the `EventBooking` entity to ensure to prevent duplicate booking.
+
+Additionally added custom validation constraint to check the capacity of the event is not exceeded when creating a booking.
 
 ### Authentication & Authorization
 I have created an Admin User entity to manage certain events resource operations. I commented out the code to demonstrate my approach.
