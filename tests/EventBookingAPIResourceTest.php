@@ -67,4 +67,84 @@ class EventBookingAPIResourceTest extends ApiTestCase
             static::getContainer()->get('doctrine')->getRepository(EventBooking::class)->findOneBy($eventBooking)
         );
     }
+
+    public function testDuplicateEventBooking(): void
+    {
+        $event = EventFactory::createOne();
+        $attendee = AttendeeFactory::createOne();
+
+        // First booking attempt
+        static::createClient()->request('POST', '/api/event-bookings', [
+            'json' => [
+                'event' => '/api/events/' . $event->getId(),
+                'attendee' => '/api/attendees/' . $attendee->getId(),
+                'bookingDate' => '2026-04-16 12:00:00',
+            ]
+        ]);
+
+        // Second booking attempt (duplicate)
+        $response = static::createClient()->request('POST', '/api/event-bookings', [
+            'json' => [
+                'event' => '/api/events/' . $event->getId(),
+                'attendee' => '/api/attendees/' . $attendee->getId(),
+                'bookingDate' => '2026-04-16 12:00:00',
+            ]
+        ]);
+
+        // Assert that the response status code is 422 (Unprocessable Entity)
+        $this->assertResponseStatusCodeSame(422);
+
+        // Assert that the response contains the validation error message
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/ConstraintViolation',
+            '@type' => 'ConstraintViolation',
+            'violations' => [
+                [
+                    'propertyPath' => 'event',
+                    'message' => 'There is already a booking for this event by this attendee.',
+                ]
+            ]
+        ]);
+    }
+
+    public function testEventBookingCapacityExceeded(): void
+    {
+        $event = EventFactory::createOne(['capacity' => 2]);
+        $attendees = AttendeeFactory::createMany(3);
+
+        // Book the event for the first two attendees (within capacity)
+        foreach (array_slice($attendees, 0, 2) as $attendee) {
+            static::createClient()->request('POST', '/api/event-bookings', [
+                'json' => [
+                    'event' => '/api/events/' . $event->getId(),
+                    'attendee' => '/api/attendees/' . $attendee->getId(),
+                    'bookingDate' => '2026-04-16 12:00:00',
+                ]
+            ]);
+        }
+
+        // Attempt to book the event for the third attendee (exceeding capacity)
+        $response = static::createClient()->request('POST', '/api/event-bookings', [
+            'json' => [
+                'event' => '/api/events/' . $event->getId(),
+                'attendee' => '/api/attendees/' . $attendees[2]->getId(),
+                'bookingDate' => '2026-04-16 12:00:00',
+            ]
+        ]);
+
+        // Assert that the response status code is 422 (Unprocessable Entity)
+        $this->assertResponseStatusCodeSame(422);
+
+        // Assert that the response contains the validation error message
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/ConstraintViolation',
+            '@type' => 'ConstraintViolation',
+            'violations' => [
+                [
+                    'propertyPath' => 'event',
+                    'message' => 'There is no available space for the event. The event is fully booked.',
+                ]
+            ]
+        ]);
+    }
 }
