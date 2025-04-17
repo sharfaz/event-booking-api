@@ -36,6 +36,9 @@ final class AttendeeFactory extends PersistentProxyObjectFactory
             'email' => self::faker()->email(),
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
+            'dateOfBirth' => \DateTimeImmutable::createFromMutable(
+                self::faker()->dateTimeBetween('-80 years', '-18 years')
+            ),
             'updatedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }

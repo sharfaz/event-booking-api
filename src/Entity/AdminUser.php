@@ -43,6 +43,11 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    public function __toString(): string
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

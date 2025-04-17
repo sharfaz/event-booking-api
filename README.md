@@ -17,6 +17,7 @@ The project use Docker for containerization and deployment, making it easy to se
 - Mercure
 - PHPUnit
 - Swagger/OpenAPI
+- EasyAdminBundle
 
 ## Installation
 
@@ -46,6 +47,9 @@ The project use Docker for containerization and deployment, making it easy to se
    Ensure your application is accessible over HTTP by visiting `http://localhost` in your web browser.
 6. To view the API documentation, navigate to `https://localhost/api` in your web browser.
 6. Run `docker compose down --remove-orphans` to stop the Docker containers.
+
+- EasyAdmin Dashboard: https://localhost
+- API Documentation: https://localhost/api
 
 ## Database Access
 I have used PostgreSQL as the database for this project. The database connection details are stored in the `.env` file.
@@ -115,7 +119,9 @@ I have added some bonus features to the API to enhance its functionality and usa
 - API Pagination: The API supports pagination for endpoints that return lists of resources. You can use the `page` query parameters to control the pagination. 
 - API Filtering: The API supports filtering of resources based on various criteria. You can use query parameters to filter the `Events` results. I included filter by name and country.
 - Docker Support
-- Swagger/OpenAPI Documentation.
+- Swagger/OpenAPI Documentation - The API Platform automatically generates OpenAPI documentation for the API based on ApiResource attribute definition in the entity.
+- Admin CRUD - I added simple Dashboard to manage events and bookings. This is built in using EasyAdminBundle where CRUD operations are generated based on the entity.
+
 
 ## Known Issues
 When you run fixtures load you may get an error 
