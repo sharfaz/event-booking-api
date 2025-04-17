@@ -33,7 +33,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
         'groups' => ['event_booking:read'],
         'datetime_format' => 'Y-m-d H:i:s'
     ],
-    denormalizationContext: ['groups' => ['event_booking:write']]
+    denormalizationContext: ['groups' => ['event_booking:write']],
+    paginationItemsPerPage: 10,
 )]
 class EventBooking
 {
@@ -42,12 +43,12 @@ class EventBooking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['event_booking:read'])]
+    #[Groups(['event_booking:read','attendee:read','event:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'eventBookings')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups(['event_booking:read', 'event_booking:write'])]
+    #[Groups(['event_booking:read', 'event_booking:write', 'attendee:read'])]
     #[Assert\NotBlank]
     #[Assert\Valid]
     private ?Event $event = null;

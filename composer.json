@@ -86,6 +86,15 @@
         }
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.62"
+        "dama/doctrine-test-bundle": "^8.2",
+        "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "justinrainbow/json-schema": "^6.4",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "7.2.*",
+        "symfony/css-selector": "7.2.*",
+        "symfony/http-client": "7.2.*",
+        "symfony/maker-bundle": "^1.62",
+        "symfony/phpunit-bridge": "^7.2",
+        "zenstruck/foundry": "^2.4"
     }
 }

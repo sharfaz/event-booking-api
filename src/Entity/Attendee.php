@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
         'groups' => ['attendee:read'],
         'datetime_format' => 'Y-m-d'
     ],
-    denormalizationContext: ['groups' => ['attendee:write']]
+    denormalizationContext: ['groups' => ['attendee:write']],
 
 )]
 class Attendee
@@ -46,21 +46,21 @@ class Attendee
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['attendee:read'])]
+    #[Groups(['attendee:read', 'event_booking:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['attendee:read', 'attendee:write'])]
+    #[Groups(['attendee:read', 'attendee:write', 'event_booking:read'])]
     #[NotBlank]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['attendee:read', 'attendee:write'])]
+    #[Groups(['attendee:read', 'attendee:write', 'event_booking:read'])]
     #[NotBlank]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['attendee:read', 'attendee:write'])]
+    #[Groups(['attendee:read', 'attendee:write', 'event_booking:read'])]
     #[NotBlank]
     #[Email]
     private ?string $email = null;
